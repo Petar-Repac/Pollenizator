@@ -137,7 +137,6 @@ public class PollenDataService {
             new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.d("function1", "Response");
                     String urlConcentrations = API_URL + "concentrations/";
                     try {
                         JSONArray JSONresults = response.getJSONArray("results");

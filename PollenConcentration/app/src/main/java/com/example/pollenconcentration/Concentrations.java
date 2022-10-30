@@ -28,6 +28,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import ir.androidexception.datatable.DataTable;
 import ir.androidexception.datatable.model.DataTableHeader;
@@ -134,7 +135,7 @@ public class Concentrations extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                search();
+                if(checkDates() == 0) search();
             }
         });
     }
@@ -157,6 +158,50 @@ public class Concentrations extends AppCompatActivity {
             }
         });
     }
+
+    //User date input check
+    // returns 0 if input is OK or fixable
+    // returns -1 if input is incompatible with search
+    private int checkDates(){
+        Date date1 = null;
+        Date date2 = null;
+        SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date1 = format.parse(dateFrom);
+            date2 = format.parse(dateTo);
+
+            //dateFrom is after dateTo
+            if(date1.compareTo(date2) > 0){
+                String temp = dateFrom;
+                dateFrom = dateTo;
+                dateTo = temp;
+
+                btn_from.setText("Од:" + dateFrom);
+                btn_to.setText("До:" + dateTo);
+
+                //Toast.makeText(Concentrations.this,"Датум од не сме бити након датума до", Toast.LENGTH_SHORT).show();
+            }
+            else if (date1.compareTo(date2) == 0){
+                Toast.makeText(Concentrations.this,"Изаберите два различита датума", Toast.LENGTH_SHORT).show();
+                return  -1;
+            }
+
+            long dtMs = Math.abs(date2.getTime() - date1.getTime());
+            long dtDays = TimeUnit.DAYS.convert(dtMs, TimeUnit.MILLISECONDS);
+
+            if(dtDays > 12){
+                Toast.makeText(Concentrations.this,"Разлика између датума не сме бити већа од 12 дана", Toast.LENGTH_SHORT).show();
+                return  -1;
+            }
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
     private void populateLocationDropdown(){
         service.getLocations(new PollenDataService.LocationResponseListener() {
             @Override

@@ -45,7 +45,7 @@ public class AllergenConcentration {
 
         double slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX*sumX);
 
-        if( slope > 0.05){
+        if( slope > 0.1){
             trend = "Растући";
         }
         else if (slope <= 0.1 && slope >= -0.1){
