@@ -266,7 +266,7 @@ public class Concentrations extends AppCompatActivity {
         ArrayList<DataTableRow> rows = new ArrayList<>();
 
         for(AllergenConcentration record: data) {
- 
+
             DataTableRow row = new DataTableRow.Builder()
                     .value(record.name)
                     .value(String.format("%.2f",record.avgConcentration))
