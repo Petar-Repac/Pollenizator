@@ -138,10 +138,18 @@ public class PollenDataService {
                 @Override
                 public void onResponse(JSONObject response) {
                     String urlConcentrations = API_URL + "concentrations/";
+                    HashMap <Integer, PollenDTO> pollens = new HashMap<Integer, PollenDTO>();
                     try {
                         JSONArray JSONresults = response.getJSONArray("results");
                         for(int i = 0; i < JSONresults.length(); i++){
+
+                            //Creating a pollen DTO to sort concentrations by date later
                             int id =JSONresults.getJSONObject(i).getInt("id");
+                            String date = JSONresults.getJSONObject(i).getString("date");
+                            PollenDTO pollen = new PollenDTO(id, locationId, date);
+                            pollens.put(id, pollen);
+
+                            //constructing GET url for concentrations for a bulk API request
                             if(i == 0){
                                 urlConcentrations += "?pollen_ids=" + id ;
                             }
@@ -151,7 +159,7 @@ public class PollenDataService {
                         }
                         //second async request
                         //entering callback hell :(
-                        concentrationRequest(urlConcentrations, responseListener);
+                        concentrationRequest(urlConcentrations, pollens, responseListener);
                     }
                     catch (JSONException e) {
                         e.printStackTrace();
@@ -172,32 +180,42 @@ public class PollenDataService {
 
     //once all pollen ids are obtained, make call to get concentrations
     //of all allergens by pollen record
-    private void concentrationRequest(String urlConcentrations, PollenResponseListener responseListener){
+    private void concentrationRequest(String urlConcentrations, HashMap <Integer, PollenDTO> pollens, PollenResponseListener responseListener){
 
         JsonObjectRequest concentrationRequest = new JsonObjectRequest(Request.Method.GET, urlConcentrations, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
+                        //Final result will be stored there
                         HashMap <Integer, AllergenConcentration> allergenData = new HashMap<Integer, AllergenConcentration>();
                         try {
                             JSONArray JSONresults = response.getJSONArray("results");
+
+                            // Processing the GET response
                             for(int i = 0; i < JSONresults.length(); i++){
 
                                 JSONObject concentration = JSONresults.getJSONObject(i);
+                                int pollenId = concentration.getInt("pollen");
                                 int allergenId = concentration.getInt("allergen");
-                                int concentrationValue = concentration.getInt("value");
 
+                                //creating concentration measurement object
+                                //used for determining trend
+                                int concentrationValue = concentration.getInt("value");
+                                String date = pollens.get(pollenId).getDate();
+                                Measurement measurement = new Measurement(concentrationValue, date);
+
+                                //Populating HashMap of resulst
                                 if(!allergenData.containsKey(allergenId)){
                                     String allergenName = allergens.get(allergenId).localizedName;
                                     AllergenConcentration data = new AllergenConcentration(allergenId, allergenName);
-                                    data.addConcentration(concentrationValue);
+                                    data.addConcentration(measurement);
 
                                     allergenData.put(allergenId,  data);
                                 }
                                 else{
                                     AllergenConcentration data = allergenData.get(allergenId);
-                                    data.addConcentration(concentrationValue);
+                                    data.addConcentration(measurement);
                                 }
 
                             }
