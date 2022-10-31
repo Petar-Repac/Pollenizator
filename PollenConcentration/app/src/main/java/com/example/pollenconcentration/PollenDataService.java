@@ -39,8 +39,10 @@ public class PollenDataService {
                             try {
                                 AllergenDTO allergen = new AllergenDTO(response.getJSONObject(i));
                                 allergens.put(allergen.id, allergen);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            }
+                            catch (JSONException e) {
+                                VolleyError error = new VolleyError(e.getMessage());
+                                Util.handleHttpError(context, error);
                             }
                         }
                     }
@@ -48,16 +50,7 @@ public class PollenDataService {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        try {
-                            Log.d("API_error", error.toString());
-                            Log.d("API_response",new String(error.networkResponse.data, "UTF-8"));
-                        }
-                        catch (UnsupportedEncodingException e) {
-                            Log.d("API_error", "getLocations error - unsupported encoding");
-                        }
-                        finally {
-                            Toast.makeText(context, "API error", Toast.LENGTH_SHORT).show();
-                        }
+                        Util.handleHttpError(context, error);
                     }
                 }
         );

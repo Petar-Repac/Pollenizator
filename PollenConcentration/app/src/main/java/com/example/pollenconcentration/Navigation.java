@@ -29,11 +29,11 @@ public class Navigation extends AppCompatActivity {
 
                 //Check for internet connection first
                 if(!Util.isInternetConnected(Navigation.this)){
-                    openActivity("Concentrations");
-                }
-                else{
                     Util.showAlert(Navigation.this, "Обавештење",
                             "Морате бити повезани на Интернет.");
+                }
+                else{
+                    openActivity("Concentrations");
                 }
 
             }
