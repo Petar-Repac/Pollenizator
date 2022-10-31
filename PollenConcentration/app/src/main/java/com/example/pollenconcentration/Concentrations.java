@@ -155,14 +155,13 @@ public class Concentrations extends AppCompatActivity {
 
             @Override
             public void onError(VolleyError error) {
-                Log.d("DataConcentration", error.toString());
+                Util.handleHttpError(Concentrations.this, error);
             }
 
             @Override
             public void onResponse(HashMap<Integer, AllergenConcentration> response) {
                 if(response.size() == 0){
                     Toast.makeText(Concentrations.this, "Нису вршена мерења на изабраној локацији у назначеном периоду.", Toast.LENGTH_LONG).show();
-
                 }
                 ArrayList<AllergenConcentration> data = new ArrayList<AllergenConcentration>(response.values());
                 populateDataTable(data);
@@ -212,21 +211,11 @@ public class Concentrations extends AppCompatActivity {
 
         return 0;
     }
-
     private void populateLocationDropdown(){
         service.getLocations(new PollenDataService.LocationResponseListener() {
             @Override
             public void onError(VolleyError error) {
-                try {
-                    Log.d("API_error", error.toString());
-                    Log.d("API_response",new String(error.networkResponse.data, "UTF-8"));
-                }
-                catch (UnsupportedEncodingException e) {
-                    Log.d("API_error", "getLocations error - unsupported encoding");
-                }
-                finally {
-                    Toast.makeText(Concentrations.this, "API error", Toast.LENGTH_SHORT).show();
-                }
+                Util.handleHttpError(Concentrations.this, error);
             }
             @Override
             public void onResponse(ArrayList<LocationDTO> response) {
@@ -270,7 +259,6 @@ public class Concentrations extends AppCompatActivity {
         dataTable.setHeader(header);
         dataTable.inflate(Concentrations.this);
     }
-
     private void populateDataTable(ArrayList<AllergenConcentration> data){
         dataTable.removeAllViews();
 

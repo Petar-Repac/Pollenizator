@@ -162,7 +162,8 @@ public class PollenDataService {
                         concentrationRequest(urlConcentrations, pollens, responseListener);
                     }
                     catch (JSONException e) {
-                        e.printStackTrace();
+                        VolleyError error = new VolleyError(e.getMessage());
+                        responseListener.onError(error);
                     }
                 }
             },
@@ -195,7 +196,6 @@ public class PollenDataService {
                             responseListener.onResponse(allergenData);
                             return;
                         }
-
                         try {
                             JSONArray JSONresults = response.getJSONArray("results");
 
@@ -232,7 +232,8 @@ public class PollenDataService {
                             }
                             responseListener.onResponse(allergenData);
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            VolleyError error = new VolleyError(e.getMessage());
+                            responseListener.onError(error);
                         }
                     }
                 },
