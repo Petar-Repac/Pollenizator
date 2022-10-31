@@ -3,11 +3,8 @@ package com.example.pollenconcentration;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,17 +14,13 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import ir.androidexception.datatable.DataTable;
@@ -37,10 +30,10 @@ import ir.androidexception.datatable.model.DataTableRow;
 public class Concentrations extends AppCompatActivity {
 
     PollenDataService service;
-    Spinner dropdown_locations;
-    Button btn_search;
-    Button btn_from;
-    Button btn_to;
+    Spinner dropdownLocations;
+    Button btnSearch;
+    Button btnFrom;
+    Button btnTo;
     DatePickerDialog datePickerDialog;
     DataTable dataTable;
 
@@ -51,10 +44,10 @@ public class Concentrations extends AppCompatActivity {
 
     private void initializeComponents(){
         //Assigning values to each control in the layout
-        dropdown_locations = findViewById(R.id.dropdown_locations);
-        btn_search = findViewById(R.id.button_search);
-        btn_from = findViewById(R.id.btn_from);
-        btn_to = findViewById(R.id.btn_to);
+        dropdownLocations = findViewById(R.id.dropdown_locations);
+        btnSearch = findViewById(R.id.button_search);
+        btnFrom = findViewById(R.id.btn_from);
+        btnTo = findViewById(R.id.btn_to);
         //Initializing the Data Service used for API calls
         service = new PollenDataService(Concentrations.this);
         dataTable = findViewById(R.id.data_table);
@@ -74,20 +67,20 @@ public class Concentrations extends AppCompatActivity {
 
         initializeComponents();
         populateComponents();
-        dropdown_locations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        dropdownLocations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                 LocationDTO location = (LocationDTO) dropdown_locations.getSelectedItem();
+                 LocationDTO location = (LocationDTO) dropdownLocations.getSelectedItem();
                  locationId = location.id;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                dropdown_locations.setSelection(0);
+                dropdownLocations.setSelection(0);
             }
 
         });
-        btn_from.setOnClickListener(new View.OnClickListener() {
+        btnFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
@@ -98,7 +91,7 @@ public class Concentrations extends AppCompatActivity {
                     datePickerDialog = new DatePickerDialog(Concentrations.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                            btn_from.setText("Од:" + year + "-" + (month + 1) + "-" + day);
+                            btnFrom.setText("Од:" + year + "-" + (month + 1) + "-" + day);
                             dateFrom = year + "-" + (month + 1) + "-" + day;
                         }
                     }, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) ,calendar.get(Calendar.DAY_OF_MONTH));
@@ -109,7 +102,7 @@ public class Concentrations extends AppCompatActivity {
                 }
             }
         });
-        btn_to.setOnClickListener(new View.OnClickListener() {
+        btnTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
@@ -120,7 +113,7 @@ public class Concentrations extends AppCompatActivity {
                     datePickerDialog = new DatePickerDialog(Concentrations.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                            btn_to.setText("До:" + year + "-" + (month + 1) + "-" + day);
+                            btnTo.setText("До:" + year + "-" + (month + 1) + "-" + day);
                             dateTo = year + "-" + (month + 1) + "-" + day;
                         }
                     }, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) ,calendar.get(Calendar.DAY_OF_MONTH));
@@ -131,7 +124,7 @@ public class Concentrations extends AppCompatActivity {
                 }
             }
         });
-        btn_search.setOnClickListener(new View.OnClickListener(){
+        btnSearch.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
@@ -150,7 +143,7 @@ public class Concentrations extends AppCompatActivity {
 
 
     private void search(){
-        LocationDTO location = (LocationDTO) dropdown_locations.getSelectedItem();
+        LocationDTO location = (LocationDTO) dropdownLocations.getSelectedItem();
         service.getConcentrations(location.id, dateFrom, dateTo, new PollenDataService.PollenResponseListener(){
 
             @Override
@@ -186,8 +179,8 @@ public class Concentrations extends AppCompatActivity {
                 dateFrom = dateTo;
                 dateTo = temp;
 
-                btn_from.setText("Од:" + dateFrom);
-                btn_to.setText("До:" + dateTo);
+                btnFrom.setText("Од:" + dateFrom);
+                btnTo.setText("До:" + dateTo);
 
                 //Toast.makeText(Concentrations.this,"Датум од не сме бити након датума до", Toast.LENGTH_SHORT).show();
             }
@@ -221,7 +214,7 @@ public class Concentrations extends AppCompatActivity {
             public void onResponse(ArrayList<LocationDTO> response) {
                 ArrayAdapter<LocationDTO> adapter =
                         new ArrayAdapter<LocationDTO>(Concentrations.this, android.R.layout.simple_spinner_dropdown_item, response);
-                dropdown_locations.setAdapter(adapter);
+                dropdownLocations.setAdapter(adapter);
             }
         });
 
@@ -238,7 +231,7 @@ public class Concentrations extends AppCompatActivity {
 
         String to = year + "-" + (month + 1)+ "-" + day;
         dateTo = to;
-        btn_to.setText("До:" + to);
+        btnTo.setText("До:" + to);
 
         calendar.add(Calendar.DATE, -7);
         year = calendar.get(Calendar.YEAR);
@@ -247,7 +240,7 @@ public class Concentrations extends AppCompatActivity {
 
         String from = year + "-" + (month + 1) + "-" + day;
         dateFrom = from;
-        btn_from.setText("Од:" + from);
+        btnFrom.setText("Од:" + from);
 
     }
     private void initializeDataTable(){
