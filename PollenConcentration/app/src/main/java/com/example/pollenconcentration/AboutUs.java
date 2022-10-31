@@ -13,12 +13,12 @@ public class AboutUs extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_author);
-        
+
         webView = findViewById(R.id.webView);
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
-        webView.loadUrl("file:///android_asset/localWebsite/generic.html");
+        webView.loadUrl("file:///android_asset/localWebsite/aboutUs.html");
     }
 }

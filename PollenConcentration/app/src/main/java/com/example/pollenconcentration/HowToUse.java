@@ -20,7 +20,7 @@ public class HowToUse extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
-        webView.loadUrl("file:///android_asset/localWebsite/generic.html");
+        webView.loadUrl("file:///android_asset/localWebsite/howToUse.html");
     }
 
 }
