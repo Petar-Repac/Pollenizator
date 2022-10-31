@@ -78,7 +78,7 @@ public class PollenDataService {
         void onError(VolleyError error);
         void onResponse(HashMap<Integer,AllergenConcentration> response);
     }
-    //Async Requests
+    /* Async Requests */
     public void getLocations(LocationResponseListener responseListener){
         String url = API_URL + "locations/";
 

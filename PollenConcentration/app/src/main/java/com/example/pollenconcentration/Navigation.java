@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
 public class Navigation extends AppCompatActivity {
 
     private Button btnConcentrations;
@@ -25,7 +26,16 @@ public class Navigation extends AppCompatActivity {
         btnConcentrations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivity("Concentrations");
+
+                //Check for internet connection first
+                if(!Util.isInternetConnected(Navigation.this)){
+                    openActivity("Concentrations");
+                }
+                else{
+                    Util.showAlert(Navigation.this, "Обавештење",
+                            "Морате бити повезани на Интернет.");
+                }
+
             }
         });
         btnAboutUs.setOnClickListener(new View.OnClickListener() {

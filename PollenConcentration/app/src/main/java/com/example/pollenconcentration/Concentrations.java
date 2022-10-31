@@ -135,7 +135,15 @@ public class Concentrations extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                if(checkDates() == 0) search();
+                //Check for internet connection first
+                if(!Util.isInternetConnected(Concentrations.this)){
+                    if(checkDates() == 0) search();
+                }
+                else{
+                    Util.showAlert(Concentrations.this, "Обавештење",
+                            "Морате бити повезани на Интернет.");
+                }
+
             }
         });
     }
