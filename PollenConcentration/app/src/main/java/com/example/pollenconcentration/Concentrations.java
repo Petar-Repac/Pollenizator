@@ -152,8 +152,14 @@ public class Concentrations extends AppCompatActivity {
 
             @Override
             public void onResponse(HashMap<Integer, AllergenConcentration> response) {
-                ArrayList<AllergenConcentration> data = new ArrayList<AllergenConcentration>(response.values());
-                populateDataTable(data);
+                if(response.size() > 0){
+                    ArrayList<AllergenConcentration> data = new ArrayList<AllergenConcentration>(response.values());
+                    populateDataTable(data);
+                }
+                else{
+                    Toast.makeText(Concentrations.this, "Нису вршена мерења на изабраној локацији у назначеном периоду.", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });

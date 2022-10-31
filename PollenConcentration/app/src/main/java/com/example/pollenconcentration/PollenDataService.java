@@ -189,6 +189,13 @@ public class PollenDataService {
 
                         //Final result will be stored there
                         HashMap <Integer, AllergenConcentration> allergenData = new HashMap<Integer, AllergenConcentration>();
+
+                        //if there were no measurements
+                        if(pollens.size() == 0) {
+                            responseListener.onResponse(allergenData);
+                            return;
+                        }
+
                         try {
                             JSONArray JSONresults = response.getJSONArray("results");
 

@@ -58,7 +58,7 @@
         app:header_gravity="center"
         app:header_horizontal_padding="0dp"
         app:header_text_color="#000"
-        app:header_text_size="6sp"
+        app:header_text_size="5sp"
         app:header_vertical_padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.395"
